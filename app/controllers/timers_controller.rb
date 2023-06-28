@@ -9,7 +9,7 @@ class TimersController < ApplicationController
 		end
 	    user_id = params[:id]
 	    @timer = Timer.create(user_id: user_id, user_status: user_status_updated)
-
+	    
 	    if @timer.save
 	      render json: {message: "timer saved", user_status: user_status_updated, status: "success"}
 	    else
@@ -17,6 +17,10 @@ class TimersController < ApplicationController
 	    end
 	end
 
-	def show
+	def showtime
+		user = User.find(params[:id])
+		user_followers_ids = user.followers.pluck(:id)
+		followers_timer = Timer.where(user_id: user_followers_ids)
+		render json: {message: followers_timer, status: "success"}
 	end
 end
